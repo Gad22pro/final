@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rising Sport Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--g:#00C853;--dg:#007A33;--bg:#0a0a0a;--card:#161616;--b:rgba(0,200,83,0.18);--tx:#e8e8e8;--mu:#888}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden}
+button{cursor:pointer;font-family:inherit}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;
+  background:rgba(10,10,10,0.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--b);height:68px;
+  display:flex;align-items:center;padding:0 32px;gap:20px}
+.nav-brand{display:flex;align-items:center;gap:12px;cursor:pointer}
+.lci{width:44px;height:44px;border-radius:50%;border:2px solid var(--g);
+  background:linear-gradient(135deg,#007A33,#00C853);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue';font-size:14px;color:#fff;
+  overflow:hidden;flex-shrink:0;position:relative}
+.lci img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;border-radius:50%}
+.lci img.vs{display:block}
+.lci:has(img.vs) .ini{display:none}
+.brand-name{font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;line-height:1;color:var(--tx)}
+.brand-sub{color:var(--g);display:block;font-size:10px;letter-spacing:4px;font-family:'Barlow Condensed';margin-top:2px}
+.nav-links{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nl{background:none;border:none;color:var(--mu);
+  font-family:'Barlow Condensed';font-size:13px;letter-spacing:2px;text-transform:uppercase;
+  padding:8px 14px;border-radius:3px;transition:color .2s;position:relative}
+.nl::after{content:'';position:absolute;bottom:4px;left:14px;right:14px;
+  height:2px;background:var(--g);transform:scaleX(0);transition:transform .2s}
+.nl:hover,.nl.active{color:var(--g)}
+.nl:hover::after,.nl.active::after{transform:scaleX(1)}
+.nav-cta{background:var(--g);color:#000;border:none;
+  font-family:'Barlow Condensed';font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:9px 20px;border-radius:2px;transition:background .2s,transform .2s;margin-left:8px}
+.nav-cta:hover{background:#00e05c;transform:translateY(-1px)}
+.nav-burger{display:none;background:none;border:none;color:var(--tx);font-size:24px;margin-left:auto;line-height:1}
+/* SOCIAL ICONS — hero + footer */
+.follow-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.follow-label{font-family:'Barlow Condensed';font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap}
+.fsoc{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);transition:all .25s;padding:0;text-decoration:none}
+.fsoc:hover{transform:translateY(-3px);border-color:transparent;background:rgba(255,255,255,.25)}
+.fsoc svg{width:20px;height:20px;fill:#fff;display:block}
+.fsoc.ig:hover{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.fsoc.tt:hover{background:#010101;border-color:#333}
+.fsoc.tw:hover{background:#1a1a1a;border-color:#555}
+.fsoc.yt:hover{background:#FF0000;border-color:#FF0000}
+/* hero social — right side over slideshow */
+.hero-social{position:absolute;bottom:70px;right:40px;z-index:10}
+/* footer icons slightly smaller */
+.footer-follow .follow-label{color:var(--mu);font-size:10px}
+.footer-follow .fsoc{width:34px;height:34px}
+.footer-follow .fsoc svg{width:17px;height:17px}
+/* contact icons */
+.contact-follow .fsoc{width:38px;height:38px}
+.contact-follow .fsoc svg{width:19px;height:19px}
+
+/* PAGES */
+.page{display:none;min-height:100vh;padding-top:68px}
+.page.active{display:block}
+
+/* HERO */
+.hero{position:relative;height:calc(100vh - 68px);min-height:500px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.hero-slides{position:absolute;inset:0}
+.hslide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s cubic-bezier(.4,0,.2,1);z-index:0}
+.hslide.active{opacity:1;z-index:1}
+/* fallback gradient backgrounds */
+.hslide-bg{position:absolute;inset:0;z-index:0}
+.bg1{background:linear-gradient(135deg,#0a0a0a 0%,#0d2010 50%,#081508 100%)}
+.bg2{background:linear-gradient(135deg,#0a0a0a 0%,#10180d 50%,#0a0a0a 100%)}
+.bg3{background:linear-gradient(135deg,#050f05 0%,#0a1a08 50%,#0a0a0a 100%)}
+/* photo sits above bg, fills entire slide */
+.hslide-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:1;display:none}
+.hslide-img.vs{display:block}
+.hslide:has(.hslide-img.vs) .hslide-bg{display:none}
+/* overlay on top of photo — subtle, not heavy */
+.hslide-overlay{position:absolute;inset:0;z-index:2;
+  background:linear-gradient(to right,rgba(0,0,0,.65) 0%,rgba(0,0,0,.2) 60%,rgba(0,0,0,.1) 100%),
+             linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 45%)}
+/* Arrow buttons */
+.hero-prev,.hero-next{position:absolute;top:50%;transform:translateY(-50%);z-index:10;
+  background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);
+  color:#fff;width:48px;height:48px;border-radius:50%;font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .25s,border-color .25s,transform .25s;backdrop-filter:blur(6px)}
+.hero-prev{left:24px}
+.hero-next{right:24px}
+.hero-prev:hover{background:rgba(0,200,83,.5);border-color:var(--g);transform:translateY(-50%) scale(1.1)}
+.hero-next:hover{background:rgba(0,200,83,.5);border-color:var(--g);transform:translateY(-50%) scale(1.1)}
+/* Dot indicators */
+.hero-dots{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10}
+.hdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);border:none;padding:0;
+  cursor:pointer;transition:all .4s cubic-bezier(.4,0,.2,1)}
+.hdot.active{background:var(--g);width:28px;border-radius:4px}
+/* Progress bar at top of hero */
+.hero-progress{position:absolute;top:0;left:0;height:3px;background:var(--g);
+  width:0%;z-index:10;transition:width linear;box-shadow:0 0 8px rgba(0,200,83,.6)}
+.hero-content{position:absolute;inset:0;z-index:8;display:flex;align-items:center;padding:0 60px}
+.hbadge{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,200,83,.08);border:1px solid var(--b);
+  padding:5px 14px;border-radius:2px;
+  font-family:'Barlow Condensed';font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--g);margin-bottom:22px}
+.hbadge::before{content:'';width:6px;height:6px;background:var(--g);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.htitle{font-family:'Bebas Neue';font-size:clamp(56px,8vw,110px);
+  line-height:.9;letter-spacing:2px;margin-bottom:20px;transition:opacity .4s}
+.htitle em{color:var(--g);font-style:normal}
+.hdesc{font-size:16px;font-weight:300;color:rgba(255,255,255,.7);
+  line-height:1.75;max-width:480px;margin-bottom:32px;min-height:52px;transition:opacity .4s}
+.hbtns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px}
+.hbtn{font-family:'Barlow Condensed';font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;padding:12px 28px;border-radius:2px;transition:all .2s;border:none}
+.hbtn-p{background:var(--g);color:#000}
+.hbtn-p:hover{background:#00e05c;transform:translateY(-2px)}
+.hbtn-s{background:transparent;color:var(--tx);border:1px solid rgba(255,255,255,.2)!important}
+.hbtn-s:hover{border-color:var(--g)!important;color:var(--g)}
+.hstats{display:flex;gap:44px}
+.hstat-num{font-family:'Bebas Neue';font-size:50px;color:var(--g);line-height:1;display:block}
+.hstat-lbl{font-family:'Barlow Condensed';font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mu)}
+
+/* SECTIONS */
+.sec{padding:72px 0}
+.container{max-width:1400px;margin:0 auto;padding:0 40px}
+.sec-label{font-family:'Barlow Condensed';font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--g);display:block;margin-bottom:10px}
+.sec-title{font-family:'Bebas Neue';font-size:clamp(34px,5vw,58px);line-height:1;letter-spacing:1px;margin-bottom:12px}
+.sec-div{width:50px;height:3px;background:var(--g);margin-bottom:36px;border-radius:2px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+
+
+/* Convert video URLs to embeddable format */
+function getEmbedUrl(url){
+  if(!url)return null;
+  try{
+    // YouTube
+    const yt=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+    if(yt)return `https://www.youtube.com/embed/${yt[1]}?autoplay=0`;
+    // YouTube Shorts
+    const yts=url.match(/youtube\.com\/shorts\/([^?&\s]+)/);
+    if(yts)return `https://www.youtube.com/embed/${yts[1]}`;
+    // TikTok — can't embed directly, just return null
+    if(url.includes('tiktok.com'))return null;
+    // Facebook video
+    if(url.includes('facebook.com'))return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`;
+    // Return as-is for other URLs
+    return url;
+  }catch(e){return null;}
+}
+/* NEWS */
+.news-card{background:var(--bg);overflow:hidden;cursor:pointer}
+.news-card:hover .nthumb img.vs{transform:scale(1.04)}
+.nthumb{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:64px;background:#111;overflow:hidden;position:relative}
+.nthumb img,.nthumb video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:none;transition:transform .4s ease}
+.nthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;display:block}
+.nthumb img.vs,.nthumb video.vs{display:block}
+.nthumb:has(img.vs) span,.nthumb:has(video.vs) span{display:none}
+.nbody{padding:14px 2px}
+.nmeta{display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-top:10px;font-family:'Barlow Condensed';border:1px solid rgba(255,255,255,.12);padding:3px 10px;border-radius:2px}
+.ncard-title{font-size:20px;font-weight:700;line-height:1.25;color:var(--tx);margin-bottom:0}
+.ncard-text{font-size:13px;color:var(--mu);line-height:1.6;margin:8px 0 0}
+
+/* PROGRAMS */
+.progs-sec{background:var(--card);border-top:1px solid var(--b);border-bottom:1px solid var(--b)}
+.pcard{background:var(--bg);border:1px solid var(--b);border-radius:4px;padding:26px 20px;transition:all .25s;position:relative;overflow:hidden}
+.pcard::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--g);transition:height .3s}
+.pcard:hover::before{height:100%}
+.pcard:hover{border-color:rgba(0,200,83,.45);transform:translateY(-3px)}
+.picon{font-size:34px;display:block;margin-bottom:12px}
+.pcard h3{font-family:'Bebas Neue';font-size:22px;letter-spacing:1px;margin-bottom:8px}
+.pcard p{font-size:14px;color:var(--mu);line-height:1.65}
+.ptag{display:inline-block;background:rgba(0,200,83,.1);color:var(--g);padding:3px 10px;font-size:11px;border-radius:2px;font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase;margin-top:10px}
+
+/* ABOUT */
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-img{width:100%;aspect-ratio:1;background:linear-gradient(135deg,#1a3a1a,#0d200d);border:1px solid var(--b);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:90px;overflow:hidden}
+.about-img img{width:100%;height:100%;object-fit:cover}
+.vals{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.vitem{background:var(--card);border:1px solid var(--b);padding:14px;border-radius:4px}
+.vitem h4{font-family:'Barlow Condensed';font-size:13px;font-weight:700;letter-spacing:1px;color:var(--g);margin-bottom:4px}
+.vitem p{font-size:12px;color:var(--mu);margin:0;line-height:1.5}
+
+/* STAFF */
+.scard{background:var(--card);border:1px solid var(--b);border-radius:4px;padding:22px 14px;text-align:center;transition:border-color .2s,transform .2s}
+.scard:hover{border-color:var(--g);transform:translateY(-4px)}
+.savatar{width:82px;height:82px;border-radius:50%;background:linear-gradient(135deg,var(--dg),var(--g));margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;border:2px solid var(--b)}
+.savatar img{width:100%;height:100%;object-fit:cover}
+.scard h3{font-size:14px;font-weight:700;margin-bottom:3px}
+.scard span{font-size:11px;color:var(--g);letter-spacing:1px;font-family:'Barlow Condensed';text-transform:uppercase}
+
+/* ACHIEVEMENTS */
+.ach-banner{background:linear-gradient(180deg,#001a00,var(--bg));padding:60px 0;border-bottom:1px solid var(--b)}
+.bstats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--b);border-radius:4px;overflow:hidden;background:var(--card);margin-top:40px}
+.bstat{padding:32px 20px;text-align:center;border-right:1px solid var(--b)}
+.bstat:last-child{border-right:none}
+.bstat span{font-family:'Bebas Neue';font-size:58px;color:var(--g);display:block;line-height:1}
+.bstat p{font-family:'Barlow Condensed';font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-top:4px}
+.trophy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tcard{position:relative;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.1);aspect-ratio:4/3;background:#0a0a0a;cursor:pointer;transition:border-color .3s,transform .3s}
+.tcard:hover{border-color:var(--g);transform:translateY(-4px)}
+.tcard-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:80px}
+.tcard-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:none}
+.tcard-img img.vs{display:block}
+.tcard-img:has(img.vs) span{display:none}
+.tcard-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,rgba(0,0,0,.2) 50%,transparent 100%)}
+.tcbody{position:absolute;bottom:0;left:0;right:0;padding:20px}
+.tyear{font-family:'Bebas Neue';font-size:44px;color:var(--g);line-height:1;letter-spacing:2px;text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.tcbody h5{font-size:16px;font-weight:700;color:#fff;margin:6px 0 0;line-height:1.3;text-transform:lowercase;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+
+/* GALLERY */
+.filts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.filt{background:transparent;border:1px solid var(--b);color:var(--mu);padding:6px 16px;font-family:'Barlow Condensed';font-size:12px;letter-spacing:2px;text-transform:uppercase;border-radius:2px;transition:all .2s}
+.filt:hover,.filt.active{background:var(--g);border-color:var(--g);color:#000}
+.galgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.gitem{aspect-ratio:4/3;background:var(--card);border:1px solid var(--b);border-radius:4px;overflow:hidden;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;font-size:44px;transition:transform .2s}
+.gitem:hover{transform:scale(1.03)}
+.gitem img{width:100%;height:100%;object-fit:cover}
+.gover{position:absolute;inset:0;background:rgba(0,200,83,.14);opacity:0;transition:opacity .2s;display:flex;align-items:center;justify-content:center;font-size:24px}
+.gitem:hover .gover{opacity:1}
+
+/* LIGHTBOX */
+.lbox{display:none;position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,.96);align-items:center;justify-content:center}
+.lbox.open{display:flex}
+.lbclose{position:absolute;top:18px;right:24px;font-size:26px;color:var(--g);background:none;border:none}
+
+/* CONTACT */
+.contact-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:56px}
+.cinfo-item{display:flex;gap:14px;align-items:flex-start;margin-bottom:22px}
+.cicon{width:40px;height:40px;background:rgba(0,200,83,.08);border:1px solid var(--b);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.clabel{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--g);font-family:'Barlow Condensed';display:block;margin-bottom:2px}
+.cval{font-size:14px}
+.cform-box{background:var(--card);border:1px solid var(--b);border-radius:4px;padding:28px}
+.cform-box h3{font-family:'Bebas Neue';font-size:26px;letter-spacing:1px;margin-bottom:18px}
+
+/* FORM INPUTS */
+.fi{margin-bottom:16px}
+.fi label{display:block;font-family:'Barlow Condensed';font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+.inp{width:100%;background:#111;border:1px solid var(--b);border-radius:2px;padding:11px 14px;color:var(--tx);font-family:'Barlow',sans-serif;font-size:14px;outline:none;transition:border-color .2s;resize:vertical}
+.inp:focus{border-color:var(--g)}
+.inp option{background:#111}
+.sbtn{width:100%;background:var(--g);color:#000;border:none;font-family:'Barlow Condensed';font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:13px;border-radius:2px;transition:background .2s}
+.sbtn:hover{background:#00e05c}
+
+/* ALERTS */
+.alert{padding:10px 14px;border-radius:3px;font-size:13px;display:none;margin-top:10px;font-family:'Barlow Condensed';letter-spacing:1px}
+.alert-ok{background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.4);color:var(--g)}
+.alert-err{background:rgba(220,50,50,.1);border:1px solid rgba(220,50,50,.3);color:#ff6b6b}
+
+/* FOOTER */
+footer{background:#070707;border-top:1px solid var(--b);padding:52px 0 24px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.fbrand{font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;margin-bottom:12px}
+.fbrand em{color:var(--g);font-style:normal}
+.ftitle{font-family:'Barlow Condensed';font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--g);margin-bottom:14px}
+.flinks{list-style:none}
+.flinks li{margin-bottom:8px}
+.flinks a{color:var(--mu);text-decoration:none;font-size:13px;transition:color .2s;cursor:pointer}
+.flinks a:hover{color:var(--g)}
+.fcopy{border-top:1px solid var(--b);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mu)}
+
+/* LOGIN OVERLAY */
+.overlay{display:none;position:fixed;inset:0;z-index:9000;background:var(--bg);overflow-y:auto}
+.overlay.open{display:block}
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-box{background:var(--card);border:1px solid var(--b);border-radius:8px;padding:40px;width:400px;max-width:95vw}
+
+/* ADMIN */
+.admin-layout{display:flex;min-height:100vh}
+.sidebar{width:240px;background:var(--card);border-right:1px solid var(--b);position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:10}
+.sb-logo{padding:18px;border-bottom:1px solid var(--b);font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;color:var(--g)}
+.sb-nav{list-style:none;padding:8px 0}
+.sb-nav li a,.sb-nav li button{display:flex;align-items:center;gap:10px;padding:10px 18px;color:var(--mu);font-family:'Barlow Condensed';font-size:12px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;background:none;border:none;width:100%;transition:all .2s;border-left:3px solid transparent}
+.sb-nav li a:hover,.sb-nav li a.active{color:var(--g);background:rgba(0,200,83,.05);border-left-color:var(--g)}
+.sb-nav li button:hover{color:#ff6b6b}
+.admin-body{margin-left:240px;padding:28px;min-height:100vh}
+.ahead{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--b)}
+.ahead h1{font-family:'Bebas Neue';font-size:34px;margin:0}
+.acards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.acard{background:var(--card);border:1px solid var(--b);border-radius:4px;padding:18px}
+.acard .num{font-family:'Bebas Neue';font-size:44px;color:var(--g);line-height:1}
+.acard p{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--mu);font-family:'Barlow Condensed';margin:3px 0 0}
+.aform{background:var(--card);border:1px solid var(--b);border-radius:4px;padding:22px;margin-bottom:24px}
+.aform h2{font-family:'Bebas Neue';font-size:22px;margin-bottom:16px}
+.arow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.aitem{background:var(--card);border:1px solid var(--b);border-radius:4px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.aitem h4{font-size:13px;font-weight:700;margin:0}
+.aitem span{font-size:11px;color:var(--mu)}
+.btn-admin{background:var(--g);color:#000;border:none;font-family:'Barlow Condensed';font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px 22px;border-radius:2px;transition:background .2s}
+.btn-admin:hover{background:#00e05c}
+.btn-admin-sm{background:var(--g);color:#000;border:none;font-family:'Barlow Condensed';font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border-radius:2px;transition:background .2s}
+.btn-admin-sm:hover{background:#00e05c}
+.delbtn{background:rgba(220,50,50,.1);border:1px solid rgba(220,50,50,.25);color:#ff6b6b;padding:5px 12px;border-radius:2px;font-size:11px;font-family:'Barlow Condensed';letter-spacing:1px;white-space:nowrap;flex-shrink:0;transition:background .2s}
+.delbtn:hover{background:rgba(220,50,50,.25)}
+.tab-rsa{display:none}
+.tab-rsa.active{display:block}
+.gman{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.gthumb{aspect-ratio:1;background:var(--bg);border:1px solid var(--b);border-radius:4px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:28px}
+.gthumb img{width:100%;height:100%;object-fit:cover}
+.gthumb-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.75);border:none;color:#ff6b6b;width:20px;height:20px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center}
+.addzone{aspect-ratio:1;background:transparent;border:2px dashed var(--b);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--mu);transition:all .2s}
+.addzone:hover{border-color:var(--g);color:var(--g)}
+
+/* Hero slide admin */
+.hsman{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.hsthumb{aspect-ratio:16/9;background:var(--bg);border:2px dashed var(--b);border-radius:4px;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:border-color .2s}
+.hsthumb:hover{border-color:var(--g)}
+.hsthumb.has-photo{border-style:solid;border-color:var(--g)}
+.hsthumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hsthumb-over{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity .2s}
+.hsthumb:hover .hsthumb-over{opacity:1}
+.hsthumb-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,200,83,.2);border-top:1px solid var(--b);font-family:'Barlow Condensed';font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--g);padding:4px 8px;text-align:center}
+
+/* Staff/ach admin */
+.photo-upl{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--dg),var(--g));display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;cursor:pointer;border:2px dashed var(--b);transition:border-color .2s;flex-shrink:0;position:relative}
+.photo-upl:hover{border-color:var(--g)}
+.photo-upl img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none}
+.photo-upl img.vs{display:block}
+.photo-upl:has(img.vs) span{display:none}
+.staff-ac{background:var(--bg);border:1px solid var(--b);border-radius:4px;padding:16px;display:flex;gap:12px;align-items:center}
+.staff-ac h4{font-size:13px;font-weight:700;margin-bottom:2px}
+.staff-ac span{font-size:11px;color:var(--g);font-family:'Barlow Condensed';letter-spacing:1px;text-transform:uppercase}
+.ach-ai{background:var(--bg);border:1px solid var(--b);border-radius:4px;padding:13px;display:flex;gap:12px;align-items:center}
+.ach-thumb{width:56px;height:56px;border-radius:4px;background:linear-gradient(135deg,#001a00,#002d00);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;flex-shrink:0;cursor:pointer;border:1px dashed var(--b);transition:border-color .2s}
+.ach-thumb:hover{border-color:var(--g)}
+.ach-thumb img{width:100%;height:100%;object-fit:cover}
+
+/* Submissions */
+.sub-card{background:var(--bg);border:1px solid var(--b);border-radius:4px;padding:16px;margin-bottom:12px}
+.sub-badge{font-family:'Barlow Condensed';font-size:11px;letter-spacing:1px;text-transform:uppercase;background:rgba(0,200,83,.1);color:var(--g);padding:2px 9px;border-radius:2px}
+.sub-msg{font-size:13px;color:var(--tx);line-height:1.7;border-left:3px solid var(--g);padding-left:10px;margin-top:8px}
+.sub-empty{color:var(--mu);font-size:14px;text-align:center;padding:36px;border:1px dashed var(--b);border-radius:4px}
+.badge-new{display:inline-block;background:var(--g);color:#000;font-size:10px;font-family:'Barlow Condensed';letter-spacing:1px;padding:2px 6px;border-radius:2px;margin-left:5px;vertical-align:middle}
+.uplzone{background:var(--bg);border:2px dashed var(--b);border-radius:4px;padding:32px;text-align:center;cursor:pointer;transition:border-color .2s}
+.uplzone:hover{border-color:var(--g)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .grid-3{grid-template-columns:1fr 1fr}
+  .trophy-grid{grid-template-columns:1fr 1fr}
+  .news-grid{grid-template-columns:1fr 1fr}
+  .galgrid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .about-layout{grid-template-columns:1fr}
+  .contact-layout{grid-template-columns:1fr}
+  .hero-content{padding:0 32px}
+}
+@media(max-width:640px){
+  .grid-3{grid-template-columns:1fr}
+  .trophy-grid{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr}
+  .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:rgba(10,10,10,.98);flex-direction:column;padding:12px 0;border-bottom:1px solid var(--b)}
+  .nav-links.open{display:flex}
+  .nav-burger{display:block}
+  .nav-socials{display:none}
+  .hero-content{padding:0 20px}
+  .htitle{font-size:52px}
+  .hstats{gap:24px}
+  .sidebar{display:none}
+  .admin-body{margin-left:0}
+  .acards{grid-template-columns:1fr 1fr}
+  .arow{grid-template-columns:1fr}
+  .hsman{grid-template-columns:1fr 1fr}
+  .bstats{grid-template-columns:1fr}
+  .bstat{border-right:none;border-bottom:1px solid var(--b)}
+  .footer-grid{grid-template-columns:1fr}
+  .settings-grid{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand" onclick="goPage('home')">
+    <div class="lci"><img id="navLogoImg" src="" alt=""><span class="ini">RSA</span></div>
+    <div>
+      <span class="brand-name">Rising Sport Academy</span>
+      <small class="brand-sub">Football Club · Est. 2021</small>
+    </div>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <button class="nl active" id="nav-home" onclick="goPage('home')">Home</button>
+    <button class="nl" id="nav-about" onclick="goPage('about')">About</button>
+    <button class="nl" id="nav-ach" onclick="goPage('achievements')">Achievements</button>
+    <button class="nl" id="nav-gal" onclick="goPage('gallery')">Gallery</button>
+    <button class="nl" id="nav-con" onclick="goPage('contact')">Contact</button>
+    <button class="nav-cta" onclick="goPage('contact')">Join Now</button>
+  </div>
+  <button class="nav-burger" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+
+  <!-- HERO SLIDESHOW -->
+  <div class="hero">
+    <div class="hero-progress" id="heroProgress"></div>
+    <div class="hero-slides">
+      <div class="hslide active" id="hslide-0">
+        <div class="hslide-bg bg1"></div>
+        <img class="hslide-img" id="hslide-img-0" src="" alt="">
+        <div class="hslide-overlay"></div>
+      </div>
+      <div class="hslide" id="hslide-1">
+        <div class="hslide-bg bg2"></div>
+        <img class="hslide-img" id="hslide-img-1" src="" alt="">
+        <div class="hslide-overlay"></div>
+      </div>
+      <div class="hslide" id="hslide-2">
+        <div class="hslide-bg bg3"></div>
+        <img class="hslide-img" id="hslide-img-2" src="" alt="">
+        <div class="hslide-overlay"></div>
+      </div>
+    </div>
+    <button class="hero-prev" onclick="heroNav(-1)">&#8592;</button>
+    <button class="hero-next" onclick="heroNav(1)">&#8594;</button>    <!-- Social strip over the slideshow -->
+    <div class="hero-social">
+      <div class="follow-bar">
+        <span class="follow-label">Follow us on</span>
+        <a class="fsoc ig" id="slink-ig-hero" href="#" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a class="fsoc tt" id="slink-tt-hero" href="#" target="_blank" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+        <a class="fsoc tw" id="slink-tw-hero" href="#" target="_blank" title="Twitter / X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a class="fsoc yt" id="slink-yt-hero" href="#" target="_blank" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+      </div>
+    </div>
+    <div class="hero-dots">
+      <button class="hdot active" onclick="heroGo(0)"></button>
+      <button class="hdot" onclick="heroGo(1)"></button>
+      <button class="hdot" onclick="heroGo(2)"></button>
+    </div>
+    <div class="hero-content">
+      <div>
+        <div class="hbadge">Kigali, Rwanda · Est. 2021</div>
+        <h1 class="htitle" id="heroTitle">Train Hard.<br><em>Rise Higher.</em></h1>
+        <p class="hdesc" id="heroDesc">Where raw talent meets elite coaching. Rising Sport Academy develops the next generation of football champions through discipline, passion, and world-class training.</p>
+        <div class="hbtns">
+          <button class="hbtn hbtn-p" onclick="goPage('contact')">Enroll Today</button>
+          <button class="hbtn hbtn-s" onclick="goPage('about')">Our Story</button>
+        </div>
+        <div class="hstats">
+          <div><span class="hstat-num" id="cnt1">100+</span><span class="hstat-lbl">Active Players</span></div>
+          <div><span class="hstat-num" id="cnt2">0</span><span class="hstat-lbl">Trophies Won</span></div>
+          <div><span class="hstat-num" id="cnt3">0</span><span class="hstat-lbl">Years Active</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS -->
+  <section class="sec">
+    <div class="container">
+      <span class="sec-label">Latest Updates</span>
+      <h2 class="sec-title">Academy News</h2>
+      <div class="sec-div"></div>
+      <div class="news-grid" id="homeNews"></div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS -->
+  <section class="sec progs-sec">
+    <div class="container">
+      <span class="sec-label">Programs We Offer</span>
+      <h2 class="sec-title">Training Pathways</h2>
+      <div class="sec-div"></div>
+      <div class="grid-3">
+        <div class="pcard"><span class="picon">⚽</span><h3>Junior Stars</h3><p>Foundational skills, teamwork, and joy for the beautiful game in a nurturing environment.</p><span class="ptag">Ages 6–10</span></div>
+        <div class="pcard"><span class="picon">🏃</span><h3>Youth Elite</h3><p>Advanced technical and tactical training with competitive league participation.</p><span class="ptag">Ages 11–15</span></div>
+        <div class="pcard"><span class="picon">🎯</span><h3>Senior Academy</h3><p>Pro-grade coaching and preparation for national competitions.</p><span class="ptag">Ages 15–17</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <section class="sec">
+    <div class="container">
+      <div class="about-layout">
+        <div>
+          <span class="sec-label">Our Story</span>
+          <h2 class="sec-title">Built on Passion,<br>Defined by Excellence</h2>
+          <div class="sec-div"></div>
+          <p style="color:var(--mu);line-height:1.8;margin-bottom:14px">Founded in 2021, Rising Sport Academy was born from a simple belief: every child deserves world-class football education. From a small training ground, we have grown into one of Rwanda's exciting football academies.</p>
+          <p style="color:var(--mu);line-height:1.8">Our coaches bring professional experience, combining modern tactics with fundamentals — discipline, teamwork, resilience, and love for the game.</p>
+          <div class="vals">
+            <div class="vitem"><h4>🏆 Excellence</h4><p>We settle for nothing less than our best.</p></div>
+            <div class="vitem"><h4>🤝 Teamwork</h4><p>Great teams built on trust and respect.</p></div>
+            <div class="vitem"><h4>💪 Discipline</h4><p>Consistent effort separates good from great.</p></div>
+            <div class="vitem"><h4>❤️ Passion</h4><p>Love for the game drives everything we do.</p></div>
+          </div>
+        </div>
+        <div class="about-img" id="aboutImgWrap">
+          <img id="aboutImgEl" src="" alt="" style="display:none">
+          <span id="aboutImgIcon">⚽</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sec" style="background:var(--card);border-top:1px solid var(--b)">
+    <div class="container">
+      <span class="sec-label">The People Behind the Team</span>
+      <h2 class="sec-title">Coaching Staff</h2>
+      <div class="sec-div"></div>
+      <div class="grid-3" id="staffGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ACHIEVEMENTS -->
+<div class="page" id="page-achievements">
+  <div class="ach-banner">
+    <div class="container">
+      <span class="sec-label">Our Pride</span>
+      <h2 class="sec-title">A Legacy of Winning</h2>
+      <p style="color:var(--mu);max-width:500px;margin-top:10px;line-height:1.7">Trophies, records, and players developed since 2021.</p>
+      <div class="bstats">
+        <div class="bstat"><span id="achPlayers">0</span><p>Active Players</p></div>
+        <div class="bstat"><span>15</span><p>Trophies Won</p></div>
+        <div class="bstat"><span id="achYears">0</span><p>Years Active</p></div>
+      </div>
+    </div>
+  </div>
+  <section class="sec">
+    <div style="padding:0 40px;max-width:1600px;margin:0 auto">
+      <span class="sec-label">Trophy Cabinet</span>
+      <h2 class="sec-title">Honours &amp; Awards</h2>
+      <div class="sec-div"></div>
+      <div class="trophy-grid" id="trophyGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- GALLERY -->
+<div class="page" id="page-gallery">
+  <section class="sec">
+    <div class="container">
+      <span class="sec-label">Our Moments</span>
+      <h2 class="sec-title">Photo Gallery</h2>
+      <div class="sec-div"></div>
+      <div class="filts">
+        <button class="filt active" onclick="filterGal('all',this)">All</button>
+        <button class="filt" onclick="filterGal('training',this)">Training</button>
+        <button class="filt" onclick="filterGal('matches',this)">Matches</button>
+        <button class="filt" onclick="filterGal('events',this)">Events</button>
+      </div>
+      <div class="galgrid" id="galGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lbox" id="lbox" onclick="closeLB(event)">
+  <button class="lbclose" onclick="closeLB()">✕</button>
+  <div id="lbcont" style="max-width:90vw;text-align:center"></div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <section class="sec">
+    <div class="container">
+      <div class="contact-layout">
+        <div>
+          <span class="sec-label">Get In Touch</span>
+          <h2 class="sec-title">Join the <em style="color:var(--g);font-style:normal">Rising</em> Family</h2>
+          <div class="sec-div"></div>
+          <p style="color:var(--mu);line-height:1.75;margin-bottom:28px">Ready to take your game to the next level? Contact us about enrollment, training schedules, and how to become part of our family.</p>
+          <div class="cinfo-item"><div class="cicon">📍</div><div><span class="clabel">Location</span><span class="cval">Gisozi Sport Complex, Gisozi, Kigali, Rwanda</span></div></div>
+          <div class="cinfo-item"><div class="cicon">📞</div><div><span class="clabel">Phone</span><span class="cval">0782492870</span></div></div>
+          <div class="cinfo-item"><div class="cicon">✉️</div><div><span class="clabel">Email</span><span class="cval"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a2d6d4c4cdcdd6c0c3ceced6c3cec7ccd6e2c5cfc3cbce8cc1cdcf">[email&#160;protected]</a></span></div></div>
+          <div class="cinfo-item"><div class="cicon">⏰</div><div><span class="clabel">Training Hours</span><span class="cval">Saturday–Sunday: 2:00 PM – 6:00 PM</span></div></div>
+          <div style="margin-top:28px" class="contact-follow">
+            <div class="follow-bar">
+              <span class="follow-label" style="color:var(--mu)">Follow us on</span>
+              <a class="fsoc ig" id="slink-ig-contact" href="#" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+              <a class="fsoc tt" id="slink-tt-contact" href="#" target="_blank" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+              <a class="fsoc tw" id="slink-tw-contact" href="#" target="_blank" title="Twitter / X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a class="fsoc yt" id="slink-yt-contact" href="#" target="_blank" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="cform-box">
+          <h3>Send Us a Message</h3>
+          <div class="fi"><label>Full Name</label><input class="inp" type="text" id="cf-name" placeholder="Your full name"></div>
+          <div class="fi"><label>Email</label><input class="inp" type="email" id="cf-email" placeholder="your@email.com"></div>
+          <div class="fi"><label>Program Interest</label>
+            <select class="inp" id="cf-prog">
+              <option value="">Select a program</option>
+              <option>Junior Stars (Ages 6–10)</option>
+              <option>Youth Elite (Ages 11–15)</option>
+              <option>Senior Academy (Ages 15–17)</option>
+              <option>General Inquiry</option>
+            </select>
+          </div>
+          <div class="fi"><label>Message</label><textarea class="inp" id="cf-msg" rows="4" placeholder="Tell us about yourself..."></textarea></div>
+          <button class="sbtn" onclick="submitContact()">Send Message</button>
+          <div class="alert alert-ok" id="contactOk">✅ Message received! We will contact you shortly.</div>
+          <div class="alert alert-err" id="contactErr">⚠️ Please fill in all fields.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="fbrand">Rising Sport <em>Academy</em></div>
+        <p style="color:var(--mu);font-size:13px;line-height:1.7;max-width:280px;margin-bottom:16px">Developing the next generation of football champions since 2021.</p>
+        <div class="footer-follow">
+          <div class="follow-bar">
+            <span class="follow-label">Follow us on</span>
+            <a class="fsoc ig" id="slink-ig-footer" href="#" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a class="fsoc tt" id="slink-tt-footer" href="#" target="_blank" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+            <a class="fsoc tw" id="slink-tw-footer" href="#" target="_blank" title="Twitter / X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a class="fsoc yt" id="slink-yt-footer" href="#" target="_blank" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="ftitle">Navigate</p>
+        <ul class="flinks">
+          <li><a onclick="goPage('home')">Home</a></li><li><a onclick="goPage('about')">About Us</a></li>
+          <li><a onclick="goPage('achievements')">Achievements</a></li><li><a onclick="goPage('gallery')">Gallery</a></li>
+          <li><a onclick="goPage('contact')">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ftitle">Programs</p>
+        <ul class="flinks"><li><a>Junior Stars</a></li><li><a>Youth Elite</a></li><li><a>Senior Academy</a></li></ul>
+      </div>
+    </div>
+    <div class="fcopy">
+      <span>© 2025 Rising Sport Academy. All rights reserved.</span>
+      <span style="color:var(--g)">⚽ Excellence on Every Pitch</span>
+    </div>
+  </div>
+</footer>
+
+<!-- LOGIN -->
+<div class="overlay" id="loginOverlay">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div style="font-size:40px;text-align:center;margin-bottom:12px">🔐</div>
+      <h2 style="font-family:'Bebas Neue';font-size:30px;text-align:center;margin-bottom:4px">Admin Portal</h2>
+      <p style="text-align:center;color:var(--mu);font-size:13px;margin-bottom:22px">Rising Sport Academy</p>
+      <div class="fi"><label>Username</label><input class="inp" type="text" id="loginUser" placeholder="admin" autocomplete="off"></div>
+      <div class="fi"><label>Password</label><input class="inp" type="password" id="loginPass" placeholder="••••••••" autocomplete="new-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="sbtn" onclick="doLogin()">Login</button>
+      <div class="alert alert-err" id="loginErr">❌ Wrong username or password.</div>
+      <button onclick="showForgot()" style="display:block;margin:10px auto 0;background:none;border:none;color:var(--mu);font-size:12px;cursor:pointer;text-decoration:underline">Forgot password?</button>
+      <button onclick="closeLogin()" style="display:block;margin:6px auto 0;background:none;border:none;color:var(--mu);font-size:13px">← Back to Website</button>
+    </div>
+
+    <!-- FORGOT PASSWORD PANEL -->
+    <div class="login-box" id="forgotBox" style="display:none">
+      <div style="font-size:40px;text-align:center;margin-bottom:12px">🔑</div>
+      <h2 style="font-family:'Bebas Neue';font-size:28px;text-align:center;margin-bottom:4px">Reset Password</h2>
+      <p style="text-align:center;color:var(--mu);font-size:13px;margin-bottom:22px">Enter your recovery code to set a new password</p>
+      <div class="fi"><label>Recovery Code</label><input class="inp" type="text" id="recoveryCode" placeholder="Enter your secret code" autocomplete="off"></div>
+      <div class="fi" id="newPassFields" style="display:none">
+        <label>New Password</label><input class="inp" type="password" id="newPassReset" placeholder="Min 6 characters">
+        <label style="margin-top:10px;display:block">Confirm Password</label><input class="inp" type="password" id="newPassConfirm" placeholder="Repeat new password" style="margin-top:6px">
+      </div>
+      <button class="sbtn" style="margin-top:14px" onclick="doRecovery()">Continue</button>
+      <div class="alert alert-err" id="recoveryErr"></div>
+      <div class="alert alert-ok" id="recoveryOk"></div>
+      <button onclick="hideForgot()" style="display:block;margin:8px auto 0;background:none;border:none;color:var(--mu);font-size:13px">← Back to Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="overlay" id="dashOverlay">
+  <div class="admin-layout">
+    <div class="sidebar">
+      <div class="sb-logo">⚽ RSA Admin</div>
+      <ul class="sb-nav">
+        <li><a onclick="showTab('dashboard')" id="tab-btn-dashboard" class="active">📊 Dashboard</a></li>
+        <li><a onclick="showTab('submissions')" id="tab-btn-submissions">📬 Messages <span id="newSubBadge" class="badge-new" style="display:none">NEW</span></a></li>
+        <li><a onclick="showTab('news')" id="tab-btn-news">📰 News</a></li>
+        <li><a onclick="showTab('hero')" id="tab-btn-hero">🖼️ Hero Photos</a></li>
+        <li><a onclick="showTab('gallery')" id="tab-btn-gallery">🗂️ Gallery</a></li>
+        <li><a onclick="showTab('logo')" id="tab-btn-logo">🎨 Logo</a></li>
+        <li><a onclick="showTab('staff')" id="tab-btn-staff">👥 Staff Photos</a></li>
+        <li><a onclick="showTab('achievements')" id="tab-btn-achievements">🏆 Achievements</a></li>
+        <li><a onclick="showTab('settings')" id="tab-btn-settings">⚙️ Settings</a></li>
+        <li><button onclick="doLogout()">🚪 Logout</button></li>
+      </ul>
+    </div>
+    <div class="admin-body">
+
+      <!-- DASHBOARD -->
+      <div class="tab-rsa active" id="tab-dashboard">
+        <div class="ahead"><div><h1>Dashboard</h1><small id="dashDate" style="color:var(--mu);font-size:13px"></small></div></div>
+        <div class="acards">
+          <div class="acard"><div class="num" id="dash-news">0</div><p>Articles</p></div>
+          <div class="acard"><div class="num" id="dash-gallery">0</div><p>Photos</p></div>
+          <div class="acard"><div class="num" id="dash-ach">0</div><p>Achievements</p></div>
+          <div class="acard"><div class="num" id="dash-msgs">0</div><p>Messages</p></div>
+        </div>
+        <h2 style="font-family:'Bebas Neue';font-size:22px;margin-bottom:12px">Latest Messages</h2>
+        <div id="dash-latest-msgs" style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px"></div>
+        <h2 style="font-family:'Bebas Neue';font-size:22px;margin-bottom:12px">Recent Articles</h2>
+        <div id="dash-recent" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <!-- SUBMISSIONS -->
+      <div class="tab-rsa" id="tab-submissions">
+        <div class="ahead"><h1>Contact Messages</h1><button class="btn-admin-sm" onclick="markAllRead()">Mark All Read</button></div>
+        <div id="submissionsList"></div>
+      </div>
+
+      <!-- NEWS -->
+      <div class="tab-rsa" id="tab-news">
+        <div class="ahead"><h1>News Manager</h1></div>
+        <div class="aform">
+          <h2>Add New Article / Flier</h2>
+          <div class="arow">
+            <div class="fi"><label>Title</label><input class="inp" type="text" id="news-title" placeholder="e.g. RSA vs Eagles FC — Sunday Match"></div>
+            <div class="fi"><label>Category</label>
+              <select class="inp" id="news-cat">
+                <option>Match Report</option><option>Training Update</option>
+                <option>Player Spotlight</option><option>Academy News</option><option>Tournament</option>
+              </select>
+            </div>
+          </div>
+          <div class="fi" style="margin-top:14px"><label>Content / Description</label><textarea class="inp" id="news-content" rows="4" placeholder="Write details about the match, event or article..."></textarea></div>
+          <div class="fi" style="margin-top:14px">
+            <label>Flier / Cover Image <span style="color:var(--mu);font-weight:400;font-size:12px">(optional — upload a match flier or photo)</span></label>
+            <!-- Image/Flier upload -->
+            <div class="uplzone" id="newsUplZone" style="padding:22px;min-height:unset" onclick="document.getElementById('news-img-input').click()">
+              <input type="file" id="news-img-input" accept="image/*" style="display:none" onchange="previewNewsMedia(this)">
+              <div id="newsUplIcon" style="font-size:28px;margin-bottom:6px">🖼️</div>
+              <img id="newsImgPrev" style="max-width:100%;max-height:180px;border-radius:6px;display:none;margin-bottom:8px" src="" alt="">
+              <p id="newsUplTxt" style="color:var(--mu);font-size:13px;margin:0">Click to upload a flier or match photo</p>
+              <button id="newsRemoveImg" style="display:none;margin-top:8px;background:rgba(255,59,48,.15);border:1px solid rgba(255,59,48,.3);color:#ff6b6b;padding:5px 14px;border-radius:3px;cursor:pointer;font-size:12px" onclick="event.stopPropagation();removeNewsImg()">Remove Image</button>
+            </div>
+            <!-- Video URL -->
+            <div class="fi" style="margin-top:12px">
+              <label>Video Link <span style="color:var(--mu);font-size:12px;font-weight:400">(YouTube, TikTok, Facebook — paste link)</span></label>
+              <input class="inp" type="url" id="news-video-url" placeholder="https://youtube.com/watch?v=..." style="margin-top:6px">
+            </div>
+          </div>
+          <button class="btn-admin" style="margin-top:14px" onclick="addNews()">Publish</button>
+        </div>
+        <h2 style="font-family:'Bebas Neue';font-size:22px;margin-bottom:12px">Published Articles</h2>
+        <div id="newsList" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <!-- HERO PHOTOS -->
+      <div class="tab-rsa" id="tab-hero">
+        <div class="ahead"><h1>Hero Slideshow Photos</h1></div>
+        <p style="color:var(--mu);font-size:14px;margin-bottom:20px">Upload real photos for each slide. They auto-transition every 5 seconds. Click a slide to upload or change its photo.</p>
+        <div class="hsman">
+          <div class="hsthumb" id="hs-thumb-0" onclick="triggerHeroUpload(0)">
+            <img class="hsthumb-img" id="hs-prev-0" src="" alt="" style="display:none">
+            <span style="font-size:28px">🖼️</span>
+            <span style="font-size:11px;color:var(--mu);font-family:'Barlow Condensed';letter-spacing:1px">Slide 1 — click to upload</span>
+            <div class="hsthumb-over">
+              <span style="font-size:20px">📷</span>
+              <span style="font-size:12px;font-family:'Barlow Condensed';letter-spacing:1px;color:#fff">Upload / Change</span>
+            </div>
+            <div class="hsthumb-label">Slide 1</div>
+          </div>
+          <div class="hsthumb" id="hs-thumb-1" onclick="triggerHeroUpload(1)">
+            <img class="hsthumb-img" id="hs-prev-1" src="" alt="" style="display:none">
+            <span style="font-size:28px">🖼️</span>
+            <span style="font-size:11px;color:var(--mu);font-family:'Barlow Condensed';letter-spacing:1px">Slide 2 — click to upload</span>
+            <div class="hsthumb-over">
+              <span style="font-size:20px">📷</span>
+              <span style="font-size:12px;font-family:'Barlow Condensed';letter-spacing:1px;color:#fff">Upload / Change</span>
+            </div>
+            <div class="hsthumb-label">Slide 2</div>
+          </div>
+          <div class="hsthumb" id="hs-thumb-2" onclick="triggerHeroUpload(2)">
+            <img class="hsthumb-img" id="hs-prev-2" src="" alt="" style="display:none">
+            <span style="font-size:28px">🖼️</span>
+            <span style="font-size:11px;color:var(--mu);font-family:'Barlow Condensed';letter-spacing:1px">Slide 3 — click to upload</span>
+            <div class="hsthumb-over">
+              <span style="font-size:20px">📷</span>
+              <span style="font-size:12px;font-family:'Barlow Condensed';letter-spacing:1px;color:#fff">Upload / Change</span>
+            </div>
+            <div class="hsthumb-label">Slide 3</div>
+          </div>
+        </div>
+        <div id="heroRemoveBtns" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
+      </div>
+
+      <!-- GALLERY -->
+      <div class="tab-rsa" id="tab-gallery">
+        <div class="ahead"><h1>Gallery Manager</h1></div>
+        <div class="fi" style="max-width:260px;margin-bottom:16px"><label>Category</label>
+          <select class="inp" id="gal-cat">
+            <option value="training">Training</option><option value="matches">Matches</option><option value="events">Events</option>
+          </select>
+        </div>
+        <input type="file" id="galUpload" accept="image/*" multiple style="display:none" onchange="uploadGalPhotos(event)">
+        <div class="gman" id="galManage"><button class="addzone" onclick="document.getElementById('galUpload').click()">+</button></div>
+      </div>
+
+      <!-- LOGO -->
+      <div class="tab-rsa" id="tab-logo">
+        <div class="ahead"><h1>Logo &amp; Branding</h1></div>
+        <p style="color:var(--mu);font-size:14px;margin-bottom:18px">Your logo appears in the navigation bar.</p>
+        <input type="file" id="logoUpload" accept="image/*" style="display:none" onchange="uploadLogo(event)">
+        <div class="uplzone" onclick="document.getElementById('logoUpload').click()">
+          <div style="font-size:42px;margin-bottom:10px" id="logoUplIcon">🎨</div>
+          <div id="logoUplPrev" style="display:none;margin-bottom:12px"><img id="logoUplImg" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--g)" src="" alt=""></div>
+          <p id="logoUplTxt" style="color:var(--mu);font-size:14px;margin-bottom:12px">Click to upload your academy logo<br><small>PNG, JPG, SVG · Max 5MB</small></p>
+          <button class="btn-admin" onclick="event.stopPropagation();document.getElementById('logoUpload').click()">Choose File</button>
+        </div>
+        <div id="logoRemoveWrap" style="display:none;margin-top:12px"><button class="delbtn" onclick="removeLogo()">Remove Logo</button></div>
+
+        <!-- ABOUT US PHOTO -->
+        <div style="margin-top:32px;border-top:1px solid var(--b);padding-top:28px">
+          <h2 style="font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;margin-bottom:6px">About Us Photo</h2>
+          <p style="color:var(--mu);font-size:14px;margin-bottom:18px">This image appears on the About Us page next to the academy story.</p>
+          <input type="file" id="aboutPhotoUpload" accept="image/*" style="display:none" onchange="uploadAboutPhoto(event)">
+          <div class="uplzone" onclick="document.getElementById('aboutPhotoUpload').click()">
+            <div style="font-size:42px;margin-bottom:10px" id="aboutUplIcon">⚽</div>
+            <div id="aboutUplPrev" style="display:none;margin-bottom:12px"><img id="aboutUplImg" style="width:120px;height:120px;border-radius:6px;object-fit:cover;border:3px solid var(--g)" src="" alt=""></div>
+            <p id="aboutUplTxt" style="color:var(--mu);font-size:14px;margin-bottom:12px">Click to upload About Us photo<br><small>PNG or JPG recommended</small></p>
+            <button class="btn-admin" onclick="event.stopPropagation();document.getElementById('aboutPhotoUpload').click()">Choose File</button>
+          </div>
+          <div id="aboutRemoveWrap" style="display:none;margin-top:12px"><button class="delbtn" onclick="removeAboutPhoto()">Remove Photo</button></div>
+        </div>
+      </div>
+
+      <!-- STAFF PHOTOS -->
+      <div class="tab-rsa" id="tab-staff">
+        <div class="ahead"><h1>Staff Photo Manager</h1></div>
+        <p style="color:var(--mu);font-size:14px;margin-bottom:18px">Click the circle to upload a photo.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px" id="staffAdminGrid"></div>
+      </div>
+
+      <!-- ACHIEVEMENTS -->
+      <div class="tab-rsa" id="tab-achievements">
+        <div class="ahead"><h1>Achievements</h1></div>
+        <div class="aform">
+          <h2>Add Achievement</h2>
+          <div class="arow">
+            <div class="fi"><label>Year</label><input class="inp" type="number" id="ach-year" placeholder="2025" min="2000" max="2040"></div>
+            <div class="fi"><label>Icon</label><input class="inp" type="text" id="ach-icon" placeholder="🏆" maxlength="2"></div>
+          </div>
+          <div class="fi" style="margin-top:14px"><label>Title</label><input class="inp" type="text" id="ach-title" placeholder="Championship name"></div>
+          <div class="fi" style="margin-top:14px"><label>Description</label><input class="inp" type="text" id="ach-desc" placeholder="Brief description"></div>
+          <button class="btn-admin" style="margin-top:14px" onclick="addAch()">Add Achievement</button>
+        </div>
+        <h2 style="font-family:'Bebas Neue';font-size:22px;margin-bottom:4px">All Achievements</h2>
+        <small style="color:var(--mu);font-size:12px;display:block;margin-bottom:12px">Click the icon to upload a trophy photo</small>
+        <div id="achAdminList" style="display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="tab-rsa" id="tab-settings">
+        <div class="ahead"><h1>Account Settings</h1></div>
+        <div class="settings-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div class="aform">
+            <h2>Change Username</h2>
+            <div class="fi"><label>Current Username</label><input class="inp" type="text" id="s-cur-user" placeholder="Current username"></div>
+            <div class="fi"><label>New Username</label><input class="inp" type="text" id="s-new-user" placeholder="Min 3 characters"></div>
+            <button class="btn-admin" style="margin-top:4px" onclick="changeUsername()">Update Username</button>
+            <div class="alert alert-ok" id="user-ok">✅ Username updated successfully.</div>
+            <div class="alert alert-err" id="user-err"></div>
+          </div>
+          <div class="aform">
+            <h2>Change Password</h2>
+            <div class="fi"><label>Current Password</label><input class="inp" type="password" id="s-cur-pass" placeholder="Current password"></div>
+            <div class="fi"><label>New Password</label><input class="inp" type="password" id="s-new-pass" placeholder="Min 6 characters"></div>
+            <div class="fi"><label>Confirm New Password</label><input class="inp" type="password" id="s-con-pass" placeholder="Repeat new password"></div>
+            <button class="btn-admin" style="margin-top:4px" onclick="changePassword()">Update Password</button>
+            <div class="alert alert-ok" id="pass-ok">✅ Password updated successfully.</div>
+            <div class="alert alert-err" id="pass-err"></div>
+          </div>
+        </div>
+        <div class="aform" style="margin-top:24px">
+          <h2>Recovery Code</h2>
+          <p style="color:var(--mu);font-size:13px;margin-bottom:16px">Set a secret recovery code. If you ever forget your password, enter this code on the login screen to reset it.</p>
+          <div class="fi"><label>Recovery Code</label><input class="inp" type="text" id="s-recovery" placeholder="e.g. RSA-2021-Kigali" autocomplete="off" maxlength="40"></div>
+          <button class="btn-admin" style="margin-top:6px" onclick="saveRecoveryCode()">Save Recovery Code</button>
+          <div class="alert alert-ok" id="recovery-ok">✅ Recovery code saved.</div>
+        </div>
+        <div class="aform" style="margin-top:24px;border-color:rgba(220,50,50,.2);background:rgba(220,50,50,.03)">
+          <h2 style="color:#ff6b6b">⚠️ Danger Zone</h2>
+          <p style="color:var(--mu);font-size:13px;margin-bottom:14px">Clears ALL content (news, gallery, achievements, messages). Your credentials will NOT be changed.</p>
+          <button class="delbtn" onclick="resetAll()">Reset All Data</button>
+        </div>
+        <div class="aform" style="margin-top:24px">
+          <h2>Social Media Links</h2>
+          <p style="color:var(--mu);font-size:13px;margin-bottom:16px">Paste your full profile URLs. Leave blank to hide an icon.</p>
+          <div class="fi"><label>Instagram</label><input class="inp" type="url" id="soc-ig" placeholder="https://instagram.com/yourpage"></div>
+          <div class="fi"><label>TikTok</label><input class="inp" type="url" id="soc-tt" placeholder="https://tiktok.com/@yourpage"></div>
+          <div class="fi"><label>Twitter / X</label><input class="inp" type="url" id="soc-tw" placeholder="https://x.com/yourpage"></div>
+          <div class="fi"><label>YouTube</label><input class="inp" type="url" id="soc-yt" placeholder="https://youtube.com/@yourpage"></div>
+          <button class="btn-admin" style="margin-top:8px" onclick="saveSocialLinks()">Save Links</button>
+          <div class="alert alert-ok" id="soc-ok">✅ Social links saved!</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* STORAGE */
+const SK_META='rsa-meta',SK_IMG='rsa-img-';
+const USE_WS=typeof window!=='undefined'&&window.storage&&typeof window.storage.set==='function';
+
+/* IndexedDB for large images — no 5MB limit */
+const IDB_NAME='rsa_imgs',IDB_STORE='imgs',IDB_VER=1;
+function idbOpen(){
+  return new Promise((res,rej)=>{
+    const r=indexedDB.open(IDB_NAME,IDB_VER);
+    r.onupgradeneeded=e=>e.target.result.createObjectStore(IDB_STORE);
+    r.onsuccess=e=>res(e.target.result);
+    r.onerror=e=>rej(e);
+  });
+}
+async function idbSet(k,v){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction(IDB_STORE,'readwrite');tx.objectStore(IDB_STORE).put(v,k);tx.oncomplete=()=>res(true);tx.onerror=rej;});}
+async function idbGet(k){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction(IDB_STORE,'readonly');const r=tx.objectStore(IDB_STORE).get(k);r.onsuccess=()=>res(r.result||null);r.onerror=rej;});}
+async function idbDel(k){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction(IDB_STORE,'readwrite');tx.objectStore(IDB_STORE).delete(k);tx.oncomplete=res;tx.onerror=rej;});}
+
+async function imgSave(k,d){
+  try{
+    if(USE_WS){await window.storage.set(SK_IMG+k,d);return true;}
+    await idbSet(k,d);return true;
+  }catch(e){
+    alert('⚠️ Storage error!\n\nTry a smaller image or use JPEG format.');
+    return false;
+  }
+}
+async function imgLoad(k){
+  if(!k)return null;
+  try{
+    if(USE_WS){const r=await window.storage.get(SK_IMG+k);return r?r.value:null;}
+    return await idbGet(k);
+  }catch(e){return null;}
+}
+async function imgDel(k){
+  if(!k)return;
+  try{
+    if(USE_WS)await window.storage.delete(SK_IMG+k);
+    else await idbDel(k);
+  }catch(e){}
+}
+function compressImage(file,cb,maxPx,quality){
+  maxPx=maxPx||500;quality=quality||0.45;
+  const r=new FileReader();
+  r.onload=ev=>{const i=new Image();i.onload=()=>{
+    let w=i.width,h=i.height;
+    if(w>maxPx||h>maxPx){if(w>h){h=Math.round(h*maxPx/w);w=maxPx;}else{w=Math.round(w*maxPx/h);h=maxPx;}}
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    const ctx=c.getContext('2d');ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+    ctx.drawImage(i,0,0,w,h);cb(c.toDataURL('image/jpeg',quality));
+  };i.src=ev.target.result;};r.readAsDataURL(file);
+}
+/* AUTO STATS */
+const FOUNDED=2021,P_START=20,P_PER_YEAR=16;
+const yearsActive=()=>new Date().getFullYear()-FOUNDED;
+const calcPlayers=()=>P_START+yearsActive()*P_PER_YEAR;
+
+/* DATA */
+const DV=6;
+const DD={
+  credentials:{username:'admin',password:'admin123'},
+  news:[
+    {id:1,title:"U-17 Team Wins Regional Championship!",cat:"Match Report",content:"Our U-17 squad delivered a spectacular performance in the Regional Youth Championship final, winning 3-1 against Amahoro FC.",date:"Feb 15, 2025",emoji:"🏆"},
+    {id:2,title:"New Training Facility Now Open",cat:"Academy News",content:"We are thrilled to announce the opening of our state-of-the-art training facility featuring two full-size pitches, a gym, and video analysis suite.",date:"Feb 8, 2025",emoji:"🏟️"},
+    {id:3,title:"Player Spotlight: Jean-Pierre Habimana",cat:"Player Spotlight",content:"Rising through our youth ranks, Jean-Pierre has just signed his first contract with Rayon Sports FC at just 18 years old.",date:"Jan 28, 2025",emoji:"⭐"},
+  ],
+  gallery:[
+    {id:1,emoji:"⚽",cat:"training",caption:"Morning Training Session",imgKey:null},
+    {id:2,emoji:"🏆",cat:"matches",caption:"Championship Victory",imgKey:null},
+    {id:3,emoji:"🏃",cat:"training",caption:"Sprint Drills",imgKey:null},
+    {id:4,emoji:"🎉",cat:"events",caption:"Award Ceremony",imgKey:null},
+    {id:5,emoji:"⚽",cat:"matches",caption:"Match Day Action",imgKey:null},
+    {id:6,emoji:"👥",cat:"events",caption:"Team Photo 2024",imgKey:null},
+  ],
+  heroSlides:[{idx:0,imgKey:null},{idx:1,imgKey:null},{idx:2,imgKey:null}],
+  achievements:[
+    {id:1,year:"2024",icon:"🏆",title:"National Youth Championship",desc:"U-17 Champions — Kigali Regional League",imgKey:null},
+    {id:2,year:"2023",icon:"🥇",title:"East Africa Cup — Runners Up",desc:"Mixed Division",imgKey:null},
+    {id:3,year:"2023",icon:"🏅",title:"Best Academy Award",desc:"Rwanda Football Federation",imgKey:null},
+    {id:4,year:"2022",icon:"🏆",title:"Youth League Champions",desc:"U-15 Division — Unbeaten season",imgKey:null},
+    {id:5,year:"2022",icon:"⭐",title:"Community Development Award",desc:"Youth outreach and social impact",imgKey:null},
+    {id:6,year:"2021",icon:"🥇",title:"Regional Cup Champions",desc:"Senior Division — Dominant victory",imgKey:null},
+  ],
+  staff:[
+    {id:1,name:"Enock KWIZERA",role:"Head Coach & CEO",emoji:"👨‍🏫",imgKey:null},
+    {id:3,name:"Jean Damour",role:"Fitness Coach",emoji:"🏃",imgKey:null},
+    {id:5,name:"Derick",role:"Secretary",emoji:"📋",imgKey:null},
+  ],
+  logoKey:null,submissions:[],nid:4,gid:7,aid:7,sid:1,_v:DV
+};
+
+async function loadData(){
+  try{
+    let raw=null;
+    if(USE_WS){const r=await window.storage.get(SK_META);raw=r?r.value:null;}
+    else raw=localStorage.getItem(SK_META);
+    if(!raw)return JSON.parse(JSON.stringify(DD));
+    const s=typeof raw==='string'?JSON.parse(raw):raw;
+    if(!s._v||s._v<DV){
+      const b=JSON.parse(JSON.stringify(DD));
+      if(s.news&&s.news.length)b.news=s.news;
+      if(s.submissions)b.submissions=s.submissions;
+      if(s.credentials)b.credentials=s.credentials;
+      if(s.logoKey)b.logoKey=s.logoKey;
+      if(s.nid)b.nid=s.nid;if(s.sid)b.sid=s.sid;
+      return b;
+    }
+    return{...JSON.parse(JSON.stringify(DD)),...s};
+  }catch(e){return JSON.parse(JSON.stringify(DD));}
+}
+async function saveData(){
+  try{DB._v=DV;const j=JSON.stringify(DB);if(USE_WS)await window.storage.set(SK_META,j);else localStorage.setItem(SK_META,j);}
+  catch(e){alert('Save failed.');}
+}
+
+let DB=JSON.parse(JSON.stringify(DD)),isAuthed=false;
+
+/* HERO SLIDESHOW */
+const SLIDES=[
+  {title:"Train Hard.<br><em>Rise Higher.</em>",desc:"Where raw talent meets elite coaching. Developing the next generation of champions through discipline, passion, and world-class training."},
+  {title:"Develop Skills.<br><em>Win Together.</em>",desc:"Forging champions on and off the pitch. Join a growing family of dedicated athletes training in the heart of Kigali since 2021."},
+  {title:"One Academy.<br><em>Endless Ambition.</em>",desc:"Your journey to the top starts here. With expert coaches, structured programs, and a winning culture — rise with us."},
+];
+let cur=0,stimer=null,ptimer=null;
+function heroGo(n){
+  const sl=document.querySelectorAll('.hslide'),dt=document.querySelectorAll('.hdot');
+  sl[cur].classList.remove('active');dt[cur].classList.remove('active');
+  cur=(n+sl.length)%sl.length;
+  sl[cur].classList.add('active');dt[cur].classList.add('active');
+  const t=document.getElementById('heroTitle'),d=document.getElementById('heroDesc');
+  if(t){t.style.opacity='0';setTimeout(()=>{t.innerHTML=SLIDES[cur].title;t.style.opacity='1';},350);}
+  if(d){d.style.opacity='0';setTimeout(()=>{d.textContent=SLIDES[cur].desc;d.style.opacity='1';},350);}
+  resetTimer();
+}
+function heroNav(dir){heroGo(cur+dir);}
+const SLIDE_INTERVAL=5000;
+function resetTimer(){
+  clearInterval(stimer);clearInterval(ptimer);
+  // reset progress bar
+  const bar=document.getElementById('heroProgress');
+  if(bar){bar.style.transition='none';bar.style.width='0%';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      bar.style.transition=`width ${SLIDE_INTERVAL}ms linear`;
+      bar.style.width='100%';
+    }));
+  }
+  stimer=setInterval(()=>heroNav(1),SLIDE_INTERVAL);
+}
+
+async function applyHeroPhotos(){
+  if(!DB.heroSlides)return;
+  for(const s of DB.heroSlides){
+    const img=document.getElementById('hslide-img-'+s.idx);
+    if(!img)continue;
+    if(s.imgKey){
+      const src=await imgLoad(s.imgKey);
+      if(src){img.src=src;img.classList.add('vs');}
+    } else {
+      img.src='';img.classList.remove('vs');
+    }
+  }
+}
+
+/* NAV */
+function goPage(p){
+  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nl').forEach(e=>e.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  const m={home:'nav-home',about:'nav-about',achievements:'nav-ach',gallery:'nav-gal',contact:'nav-con'};
+  const e=document.getElementById(m[p]);if(e)e.classList.add('active');
+  window.scrollTo(0,0);
+  document.getElementById('navLinks').classList.remove('open');
+  if(p==='home')renderHomeNews();
+  if(p==='gallery')renderGallery('all');
+  if(p==='achievements'){renderTrophies();updateAchStats();}
+  if(p==='about')renderStaff();
+}
+
+/* STATS */
+function updateAchStats(){
+  const y=yearsActive(),pl=calcPlayers();
+  const e1=document.getElementById('achPlayers'),e2=document.getElementById('achYears');
+  if(e1)e1.textContent=pl;if(e2)e2.textContent=y;
+  // keep hero trophy count live
+  const c2=document.getElementById('cnt2');
+  if(c2)c2.textContent=DB.achievements.length;
+}
+function animateCounters(){
+  const y=yearsActive();
+  const trophies=DB.achievements.length;
+  // cnt1 (players) is static 100+ — no animation needed
+  // cnt2 = trophies from DB
+  const el2=document.getElementById('cnt2');
+  if(el2){let v=0;const t=setInterval(()=>{v=Math.min(v+trophies/40,trophies);el2.textContent=Math.floor(v);if(v>=trophies)clearInterval(t);},16);}
+  // cnt3 = years active
+  const el3=document.getElementById('cnt3');
+  if(el3){let v=0;const t=setInterval(()=>{v=Math.min(v+y/40,y);el3.textContent=Math.floor(v);if(v>=y)clearInterval(t);},16);}
+}
+
+/* LOGO */
+async function applyLogo(){if(DB.logoKey){const s=await imgLoad(DB.logoKey);if(s)setLogoUI(s);}}
+function setLogoUI(src){
+  const ni=document.getElementById('navLogoImg');if(ni){ni.src=src;ni.classList.add('vs');}
+  const li=document.getElementById('logoUplImg');if(li)li.src=src;
+  const lp=document.getElementById('logoUplPrev');if(lp)lp.style.display='block';
+  const lic=document.getElementById('logoUplIcon');if(lic)lic.style.display='none';
+  const lt=document.getElementById('logoUplTxt');if(lt)lt.textContent='✅ Logo uploaded! Click to change.';
+  const lrw=document.getElementById('logoRemoveWrap');if(lrw)lrw.style.display='block';
+}
+function uploadLogo(e){const f=e.target.files[0];if(!f)return;
+  compressImage(f,async d=>{const ok=await imgSave('logo_main',d);if(!ok)return;DB.logoKey='logo_main';await saveData();setLogoUI(d);});}
+async function removeLogo(){await imgDel(DB.logoKey);DB.logoKey=null;await saveData();
+  const ni=document.getElementById('navLogoImg');if(ni){ni.src='';ni.classList.remove('vs');}
+  const lp=document.getElementById('logoUplPrev');if(lp)lp.style.display='none';
+  const lic=document.getElementById('logoUplIcon');if(lic)lic.style.display='block';
+  const lt=document.getElementById('logoUplTxt');if(lt)lt.innerHTML='Click to upload your academy logo<br><small>PNG, JPG, SVG</small>';
+  const lrw=document.getElementById('logoRemoveWrap');if(lrw)lrw.style.display='none';}
+
+
+/* Convert video URLs to embeddable format */
+function getEmbedUrl(url){
+  if(!url)return null;
+  try{
+    // YouTube
+    const yt=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+    if(yt)return `https://www.youtube.com/embed/${yt[1]}?autoplay=0`;
+    // YouTube Shorts
+    const yts=url.match(/youtube\.com\/shorts\/([^?&\s]+)/);
+    if(yts)return `https://www.youtube.com/embed/${yts[1]}`;
+    // TikTok — can't embed directly, just return null
+    if(url.includes('tiktok.com'))return null;
+    // Facebook video
+    if(url.includes('facebook.com'))return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false`;
+    // Return as-is for other URLs
+    return url;
+  }catch(e){return null;}
+}
+/* NEWS */
+async function renderHomeNews(){
+  const items=await Promise.all(DB.news.slice(0,3).map(async n=>{
+    const media=n.imgKey?await imgLoad(n.imgKey):null;
+    const embedUrl=n.videoUrl?getEmbedUrl(n.videoUrl):null;
+    return `<div class="news-card">
+      <div class="nthumb">
+        ${embedUrl
+          ?`<iframe style="position:absolute;inset:0;width:100%;height:100%;border:none" src="${embedUrl}" allow="autoplay;encrypted-media" allowfullscreen></iframe><span style="display:none"></span>`
+          :`<img class="${media?'vs':''}" src="${media||''}" alt="${n.title}"><span>${n.emoji||'📰'}</span>`
+        }
+      </div>
+      <div class="nbody">
+        <h5 class="ncard-title">${n.title}</h5>
+        <p class="ncard-text">${n.content.substring(0,120)}...</p>
+        <div class="nmeta">${n.cat}</div>
+      </div></div>`;
+  }));
+  document.getElementById('homeNews').innerHTML=items.join('');
+}
+
+/* GALLERY */
+async function renderGallery(filter){
+  const items=filter==='all'?DB.gallery:DB.gallery.filter(x=>x.cat===filter);
+  const html=await Promise.all(items.map(async x=>{
+    const src=await imgLoad(x.imgKey);
+    return `<div class="gitem" onclick="openLB('${x.emoji}','${escQ(x.caption)}','${src||''}')">
+      ${src?`<img src="${src}" alt="">`:x.emoji}<div class="gover">🔍</div></div>`;
+  }));
+  document.getElementById('galGrid').innerHTML=html.join('');
+}
+function filterGal(cat,btn){document.querySelectorAll('.filt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderGallery(cat);}
+function openLB(e,cap,src){
+  document.getElementById('lbcont').innerHTML=src
+    ?`<img src="${src}" style="max-width:85vw;max-height:80vh;border-radius:4px"><p style="text-align:center;color:var(--mu);margin-top:10px;font-family:'Barlow Condensed';letter-spacing:2px;text-transform:uppercase">${cap}</p>`
+    :`<div style="font-size:96px">${e}</div><p style="text-align:center;color:var(--mu);margin-top:10px">${cap}</p>`;
+  document.getElementById('lbox').classList.add('open');
+}
+function closeLB(ev){if(!ev||ev.target.id==='lbox'||ev.target.classList.contains('lbclose'))document.getElementById('lbox').classList.remove('open');}
+
+/* STAFF */
+async function renderStaff(){
+  const html=await Promise.all(DB.staff.map(async s=>{
+    const p=await imgLoad(s.imgKey);
+    return `<div class="scard"><div class="savatar">${p?`<img src="${p}" alt="">`:s.emoji}</div><h3>${s.name}</h3><span>${s.role}</span></div>`;
+  }));
+  document.getElementById('staffGrid').innerHTML=html.join('');
+}
+
+/* TROPHIES */
+async function renderTrophies(){
+  const html=await Promise.all(DB.achievements.map(async a=>{
+    const p=await imgLoad(a.imgKey);
+    return `<div class="tcard">
+      <div class="tcard-img">
+        <img class="${p?'vs':''}" src="${p||''}" alt="${a.title}">
+        <span>${a.icon||'🏆'}</span>
+      </div>
+      <div class="tcard-overlay"></div>
+      <div class="tcbody">
+        <div class="tyear">${a.year}</div>
+        <h5>${a.title}</h5>
+      </div></div>`;
+  }));
+  document.getElementById('trophyGrid').innerHTML=html.join('');
+}
+
+/* CONTACT */
+async function submitContact(){
+  const name=document.getElementById('cf-name').value.trim(),email=document.getElementById('cf-email').value.trim();
+  const prog=document.getElementById('cf-prog').value,msg=document.getElementById('cf-msg').value.trim();
+  hideAlerts('contactOk','contactErr');
+  if(!name||!email||!prog||!msg){showAlert('contactErr');return;}
+  DB.submissions.unshift({id:DB.sid++,name,email,program:prog,message:msg,
+    date:new Date().toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}),read:false});
+  await saveData();
+  ['cf-name','cf-email','cf-msg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cf-prog').value='';
+  showAlert('contactOk');updateNewSubBadge();
+}
+
+/* AUTH */
+function openAdmin(){if(isAuthed)openDash();else document.getElementById('loginOverlay').classList.add('open');}
+function closeLogin(){document.getElementById('loginOverlay').classList.remove('open');}
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value;
+  if(u===DB.credentials.username&&p===DB.credentials.password){
+    isAuthed=true;hideAlerts('loginErr');document.getElementById('loginOverlay').classList.remove('open');openDash();
+  }else{document.getElementById('loginErr').textContent='❌ Wrong username or password.';showAlert('loginErr');}
+}
+function doLogout(){isAuthed=false;document.getElementById('dashOverlay').classList.remove('open');document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';}
+function openDash(){
+  document.getElementById('dashOverlay').classList.add('open');
+  refreshDash();renderNewsList();renderGalManage();renderStaffAdmin();renderAchAdmin();renderSubmissions();updateNewSubBadge();renderHeroAdmin();loadRecoveryCode();applySocialLinks();
+}
+
+/* TABS */
+function showTab(t){
+  document.querySelectorAll('.tab-rsa').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.sb-nav li a').forEach(e=>e.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('tab-btn-'+t).classList.add('active');
+  if(t==='submissions')markAllRead();
+}
+
+/* DASHBOARD */
+function refreshDash(){
+  document.getElementById('dash-news').textContent=DB.news.length;
+  document.getElementById('dash-gallery').textContent=DB.gallery.length;
+  document.getElementById('dash-ach').textContent=DB.achievements.length;
+  document.getElementById('dash-msgs').textContent=DB.submissions.length;
+  document.getElementById('dashDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dash-latest-msgs').innerHTML=DB.submissions.length===0
+    ?'<p style="color:var(--mu)">No messages yet.</p>'
+    :DB.submissions.slice(0,3).map(s=>`<div class="aitem"><div><h4>${s.name} ${!s.read?'<span class="badge-new">NEW</span>':''}</h4><span>${s.program} · ${s.date}</span></div><button class="btn-admin-sm" onclick="showTab('submissions')">View</button></div>`).join('');
+  document.getElementById('dash-recent').innerHTML=DB.news.slice(0,3).map(n=>
+    `<div class="aitem"><div><h4>${n.emoji} ${n.title}</h4><span>${n.cat} · ${n.date}</span></div></div>`
+  ).join('')||'<p style="color:var(--mu)">No articles yet.</p>';
+}
+
+/* HERO ADMIN */
+async function renderHeroAdmin(){
+  if(!DB.heroSlides)DB.heroSlides=[{idx:0,imgKey:null},{idx:1,imgKey:null},{idx:2,imgKey:null}];
+  const removeBtns=[];
+  for(const s of DB.heroSlides){
+    const thumb=document.getElementById('hs-thumb-'+s.idx);
+    const prev=document.getElementById('hs-prev-'+s.idx);
+    if(!thumb||!prev)continue;
+    if(s.imgKey){
+      const src=await imgLoad(s.imgKey);
+      if(src){
+        prev.src=src;prev.style.display='block';
+        thumb.classList.add('has-photo');
+        thumb.querySelectorAll('span:not(.hsthumb-label)').forEach(sp=>sp.style.display='none');
+        removeBtns.push(`<button class="delbtn" onclick="removeHeroSlide(${s.idx})">Remove Slide ${s.idx+1} Photo</button>`);
+      }
+    }else{
+      prev.style.display='none';
+      thumb.classList.remove('has-photo');
+      thumb.querySelectorAll('span:not(.hsthumb-label)').forEach(sp=>sp.style.display='');
+    }
+  }
+  const rb=document.getElementById('heroRemoveBtns');if(rb)rb.innerHTML=removeBtns.join('');
+}
+function triggerHeroUpload(idx){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    compressImage(f,async d=>{
+      if(!DB.heroSlides)DB.heroSlides=[{idx:0,imgKey:null},{idx:1,imgKey:null},{idx:2,imgKey:null}];
+      const key='hero_'+idx;const ok=await imgSave(key,d);if(!ok)return;
+      DB.heroSlides[idx].imgKey=key;await saveData();
+      const img=document.getElementById('hslide-img-'+idx);
+      if(img){img.src=d;img.classList.add('vs');}
+      renderHeroAdmin();
+    },1280,0.85);};inp.click();
+}
+async function removeHeroSlide(idx){
+  if(!DB.heroSlides)return;
+  await imgDel(DB.heroSlides[idx].imgKey);
+  DB.heroSlides[idx].imgKey=null;await saveData();
+  const img=document.getElementById('hslide-img-'+idx);if(img){img.src='';img.removeAttribute('src');img.classList.remove('vs');}
+  renderHeroAdmin();
+}
+
+/* GALLERY ADMIN */
+function uploadGalPhotos(e){
+  const cat=document.getElementById('gal-cat').value,files=Array.from(e.target.files);let done=0;
+  files.forEach(f=>{compressImage(f,async d=>{
+    const key='gal_'+DB.gid;await imgSave(key,d);
+    DB.gallery.push({id:DB.gid++,imgKey:key,emoji:'📸',cat,caption:f.name.replace(/\.[^.]+$/,'')});
+    done++;if(done===files.length){await saveData();renderGalManage();renderGallery('all');refreshDash();}
+  });});e.target.value='';
+}
+async function renderGalManage(){
+  const parts=await Promise.all(DB.gallery.map(async x=>{const src=await imgLoad(x.imgKey);
+    return `<div class="gthumb">${src?`<img src="${src}" alt="">`:x.emoji}<button class="gthumb-del" onclick="delGalItem(${x.id})">✕</button></div>`;}));
+  document.getElementById('galManage').innerHTML=parts.join('')+`<button class="addzone" onclick="document.getElementById('galUpload').click()">+</button>`;
+}
+async function delGalItem(id){const item=DB.gallery.find(x=>x.id===id);if(item)await imgDel(item.imgKey);
+  DB.gallery=DB.gallery.filter(x=>x.id!==id);await saveData();renderGalManage();renderGallery('all');refreshDash();}
+
+/* STAFF ADMIN */
+async function renderStaffAdmin(){
+  const html=await Promise.all(DB.staff.map(async s=>{const photo=await imgLoad(s.imgKey);
+    return `<div class="staff-ac">
+      <div class="photo-upl" onclick="triggerStaffPhoto(${s.id})">${photo?`<img src="${photo}" class="vs" alt="">`:''}<span>${s.emoji}</span></div>
+      <div><h4>${s.name}</h4><span>${s.role}</span><small style="color:var(--mu);font-size:11px;display:block;margin-top:4px">Click circle to change photo</small></div>
+    </div>`;}));
+  document.getElementById('staffAdminGrid').innerHTML=html.join('');
+}
+function triggerStaffPhoto(id){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=e=>{const f=e.target.files[0];if(!f)return;
+    compressImage(f,async d=>{const m=DB.staff.find(s=>s.id===id);if(!m)return;
+      const key='staff_'+id;const ok=await imgSave(key,d);if(!ok)return;
+      m.imgKey=key;await saveData();renderStaffAdmin();renderStaff();});};inp.click();}
+
+/* NEWS ADMIN */
+/* NEWS IMAGE PREVIEW */
+let _newsImgData=null, _newsMediaType='image';
+
+function previewNewsMedia(input){
+  if(!input.files||!input.files[0])return;
+  compressImage(input.files[0],d=>{
+    _newsImgData=d;
+    document.getElementById('newsImgPrev').src=d;
+    document.getElementById('newsImgPrev').style.display='block';
+    document.getElementById('newsUplIcon').style.display='none';
+    document.getElementById('newsUplTxt').style.display='none';
+    document.getElementById('newsRemoveImg').style.display='inline-block';
+  });
+}
+
+function removeNewsImg(){
+  _newsImgData=null;_newsMediaType='image';
+  document.getElementById('newsImgPrev').src='';
+  document.getElementById('newsImgPrev').style.display='none';
+  document.getElementById('newsUplIcon').style.display='block';
+  document.getElementById('newsUplTxt').style.display='block';
+  document.getElementById('newsRemoveImg').style.display='none';
+  document.getElementById('news-img-input').value='';
+}
+
+async function addNews(){
+  const title=document.getElementById('news-title').value.trim(),content=document.getElementById('news-content').value.trim();
+  const cat=document.getElementById('news-cat').value;
+  if(!title||!content){alert('Fill title and content');return;}
+  const videoUrl=document.getElementById('news-video-url').value.trim();
+  const entry={id:DB.nid++,title,content,cat,emoji:'📰',date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}),imgKey:null,videoUrl:videoUrl||null};
+  if(_newsImgData){
+    const key='news_'+entry.id;
+    const ok=await imgSave(key,_newsImgData);
+    if(ok)entry.imgKey=key;
+  }
+  DB.news.unshift(entry);
+  await saveData();
+  ['news-title','news-content','news-video-url'].forEach(id=>document.getElementById(id).value='');
+  removeNewsImg();
+  renderNewsList();renderHomeNews();refreshDash();
+}
+async function renderNewsList(){
+  const items=await Promise.all(DB.news.map(async n=>{
+    const img=n.imgKey?await imgLoad(n.imgKey):null;
+    return `<div class="aitem" style="align-items:flex-start;gap:12px">
+      ${img
+          ?`<img src="${img}" style="width:56px;height:56px;object-fit:cover;border-radius:4px;flex-shrink:0" alt="">`
+          :n.videoUrl
+            ?`<div style="width:56px;height:56px;background:#1a0a0a;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">▶️</div>`
+            :'<div style="width:56px;height:56px;background:var(--card);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📰</div>'}
+      <div style="flex:1;min-width:0"><h4 style="margin:0 0 3px">${n.title}</h4><span style="color:var(--mu);font-size:12px">${n.cat} · ${n.date}</span></div>
+      <button class="delbtn" onclick="delNews(${n.id})">Delete</button></div>`;
+  }));
+  document.getElementById('newsList').innerHTML=items.join('')||'<p style="color:var(--mu)">No articles yet.</p>';
+}
+async function delNews(id){if(!confirm('Delete?'))return;const n=DB.news.find(x=>x.id===id);if(n&&n.imgKey)await imgDel(n.imgKey);
+  DB.news=DB.news.filter(n=>n.id!==id);await saveData();renderNewsList();renderHomeNews();refreshDash();}
+
+/* SOCIAL LINKS */
+function saveSocialLinks(){
+  const links={ig:document.getElementById('soc-ig').value.trim(),tt:document.getElementById('soc-tt').value.trim(),tw:document.getElementById('soc-tw').value.trim(),yt:document.getElementById('soc-yt').value.trim()};
+  localStorage.setItem('rsa_social_links',JSON.stringify(links));
+  applySocialLinks();
+  showAlert('soc-ok');
+}
+function applySocialLinks(){
+  let links={ig:'',tt:'',tw:'',yt:''};
+  try{links=JSON.parse(localStorage.getItem('rsa_social_links')||'{}');}catch(e){}
+  // populate settings inputs
+  ['ig','tt','tw','yt'].forEach(k=>{const el=document.getElementById('soc-'+k);if(el&&links[k])el.value=links[k];});
+  // update all icon hrefs — hide if no link
+  ['hero','contact','footer'].forEach(loc=>{
+    ['ig','tt','tw','yt'].forEach(k=>{
+      const el=document.getElementById(`slink-${k}-${loc}`);
+      if(!el)return;
+      const url=links[k]||'';
+      el.href=url||'#';
+      el.style.display=url?'flex':'none';
+    });
+  });
+}
+
+/* ACH ADMIN */
+async function addAch(){
+  const year=document.getElementById('ach-year').value,icon=document.getElementById('ach-icon').value||'🏆';
+  const title=document.getElementById('ach-title').value.trim(),desc=document.getElementById('ach-desc').value.trim();
+  if(!year||!title){alert('Fill year and title');return;}
+  DB.achievements.unshift({id:DB.aid++,year,icon,title,desc,imgKey:null});await saveData();
+  ['ach-year','ach-title','ach-desc','ach-icon'].forEach(id=>document.getElementById(id).value='');
+  renderAchAdmin();renderTrophies();refreshDash();updateAchStats();
+}
+async function renderAchAdmin(){
+  const html=await Promise.all(DB.achievements.map(async a=>{const p=await imgLoad(a.imgKey);
+    return `<div class="ach-ai"><div class="ach-thumb" onclick="triggerAchPhoto(${a.id})">${p?`<img src="${p}" alt="">`:a.icon}</div>
+    <div style="flex:1;min-width:0"><h4 style="font-size:13px;font-weight:700;margin:0">${a.year} — ${a.title}</h4>
+    <span style="font-size:11px;color:var(--mu)">${a.desc}</span></div>
+    <button class="delbtn" onclick="delAch(${a.id})">Delete</button></div>`;}));
+  document.getElementById('achAdminList').innerHTML=html.join('');
+}
+function triggerAchPhoto(id){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=e=>{const f=e.target.files[0];if(!f)return;
+    compressImage(f,async d=>{const a=DB.achievements.find(x=>x.id===id);if(!a)return;
+      const key='ach_'+id;const ok=await imgSave(key,d);if(!ok)return;
+      a.imgKey=key;await saveData();renderAchAdmin();renderTrophies();},320,0.40);};inp.click();}
+async function delAch(id){if(!confirm('Delete?'))return;const a=DB.achievements.find(x=>x.id===id);if(a)await imgDel(a.imgKey);
+  DB.achievements=DB.achievements.filter(a=>a.id!==id);await saveData();renderAchAdmin();renderTrophies();refreshDash();updateAchStats();}
+
+/* SUBMISSIONS */
+function renderSubmissions(){
+  const el=document.getElementById('submissionsList');
+  if(DB.submissions.length===0){el.innerHTML='<div class="sub-empty">📬 No messages yet.</div>';return;}
+  el.innerHTML=DB.submissions.map(s=>`<div class="sub-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+      <h5 style="font-size:14px;font-weight:700;margin:0">✉️ ${s.name} ${!s.read?'<span class="badge-new">NEW</span>':''}</h5>
+      <div style="display:flex;gap:8px"><span class="sub-badge">${s.program}</span><button class="delbtn" onclick="deleteSubmission(${s.id})">Delete</button></div>
+    </div>
+    <p style="font-size:12px;color:var(--mu);margin-bottom:6px">📧 ${s.email} · 🕐 ${s.date}</p>
+    <div class="sub-msg">${s.message}</div></div>`).join('');
+}
+async function markAllRead(){DB.submissions.forEach(s=>s.read=true);await saveData();document.getElementById('newSubBadge').style.display='none';renderSubmissions();refreshDash();}
+async function deleteSubmission(id){if(!confirm('Delete?'))return;DB.submissions=DB.submissions.filter(s=>s.id!==id);await saveData();renderSubmissions();refreshDash();}
+function updateNewSubBadge(){const u=DB.submissions.filter(s=>!s.read).length;document.getElementById('newSubBadge').style.display=u>0?'inline-block':'none';}
+
+/* FORGOT PASSWORD */
+function showForgot(){
+  document.querySelector('.login-box').style.display='none';
+  document.getElementById('forgotBox').style.display='block';
+  document.getElementById('recoveryCode').value='';
+  document.getElementById('newPassReset').value='';
+  document.getElementById('newPassConfirm').value='';
+  document.getElementById('newPassFields').style.display='none';
+  hideAlerts('recoveryErr','recoveryOk');
+  document.getElementById('forgotBox').querySelector('.sbtn').textContent='Continue';
+}
+function hideForgot(){
+  document.querySelector('.login-box').style.display='block';
+  document.getElementById('forgotBox').style.display='none';
+}
+let recoveryVerified=false;
+async function doRecovery(){
+  const code=document.getElementById('recoveryCode').value.trim();
+  const stored=localStorage.getItem('rsa_recovery_code')||'';
+  hideAlerts('recoveryErr','recoveryOk');
+  if(!recoveryVerified){
+    if(!stored)return showAlertMsg('recoveryErr','❌ No recovery code set. Ask your IT person.');
+    if(code!==stored)return showAlertMsg('recoveryErr','❌ Wrong recovery code. Try again.');
+    // code matches — show new password fields
+    recoveryVerified=true;
+    document.getElementById('newPassFields').style.display='block';
+    document.getElementById('recoveryCode').disabled=true;
+    document.getElementById('forgotBox').querySelector('.sbtn').textContent='Set New Password';
+  } else {
+    const np=document.getElementById('newPassReset').value;
+    const cp=document.getElementById('newPassConfirm').value;
+    if(!np||!cp)return showAlertMsg('recoveryErr','⚠️ Fill both password fields.');
+    if(np.length<6)return showAlertMsg('recoveryErr','⚠️ Password must be at least 6 characters.');
+    if(np!==cp)return showAlertMsg('recoveryErr','❌ Passwords do not match.');
+    DB.credentials.password=np;await saveData();
+    recoveryVerified=false;
+    showAlertMsg('recoveryOk','✅ Password reset! You can now log in.');
+    document.getElementById('forgotBox').querySelector('.sbtn').textContent='Continue';
+    setTimeout(hideForgot,2000);
+  }
+}
+
+/* RECOVERY CODE SETTINGS */
+function saveRecoveryCode(){
+  const code=document.getElementById('s-recovery').value.trim();
+  if(!code)return;
+  localStorage.setItem('rsa_recovery_code',code);
+  showAlert('recovery-ok');
+}
+function loadRecoveryCode(){
+  const code=localStorage.getItem('rsa_recovery_code')||'';
+  const el=document.getElementById('s-recovery');
+  if(el&&code)el.value=code;
+}
+async function changeUsername(){
+  const cur=document.getElementById('s-cur-user').value.trim(),next=document.getElementById('s-new-user').value.trim();
+  hideAlerts('user-ok','user-err');
+  if(!cur||!next)return showAlertMsg('user-err','⚠️ Fill both fields.');
+  if(cur!==DB.credentials.username)return showAlertMsg('user-err','❌ Current username is incorrect.');
+  if(next.length<3)return showAlertMsg('user-err','⚠️ Min 3 characters required.');
+  DB.credentials.username=next;await saveData();
+  document.getElementById('s-cur-user').value='';document.getElementById('s-new-user').value='';
+  showAlert('user-ok');
+}
+async function changePassword(){
+  const cur=document.getElementById('s-cur-pass').value,next=document.getElementById('s-new-pass').value,conf=document.getElementById('s-con-pass').value;
+  hideAlerts('pass-ok','pass-err');
+  if(!cur||!next||!conf)return showAlertMsg('pass-err','⚠️ Fill all three fields.');
+  if(cur!==DB.credentials.password)return showAlertMsg('pass-err','❌ Current password is incorrect.');
+  if(next.length<6)return showAlertMsg('pass-err','⚠️ Min 6 characters required.');
+  if(next!==conf)return showAlertMsg('pass-err','❌ Passwords do not match.');
+  DB.credentials.password=next;await saveData();
+  ['s-cur-pass','s-new-pass','s-con-pass'].forEach(id=>document.getElementById(id).value='');
+  showAlert('pass-ok');
+}
+async function resetAll(){
+  if(!confirm('⚠️ Delete ALL content?\n\nYour credentials will NOT change. Cannot be undone.'))return;
+  const creds=JSON.parse(JSON.stringify(DB.credentials));
+  try{
+    if(USE_WS){const keys=await window.storage.list('rsa-');if(keys&&keys.keys)for(const k of keys.keys){try{await window.storage.delete(k);}catch(e){}}}
+    else{try{const db=await idbOpen();const tx=db.transaction(IDB_STORE,'readwrite');tx.objectStore(IDB_STORE).clear();}catch(e){}}
+  }catch(e){}
+  DB=JSON.parse(JSON.stringify(DD));DB.credentials=creds;await saveData();location.reload();
+}
+
+/* HELPERS */
+function showAlert(id){const el=document.getElementById(id);if(!el)return;el.style.display='block';setTimeout(()=>el.style.display='none',4500);}
+function showAlertMsg(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;showAlert(id);}
+function hideAlerts(...ids){ids.forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});}
+function escQ(s){return String(s).replace(/'/g,"&#39;");}
+
+window.addEventListener('hashchange',()=>{if(location.hash==='#admin'){history.replaceState(null,'',location.pathname);openAdmin();}});
+
+window.addEventListener('load',async()=>{
+  const _adm=location.hash==='#admin';
+  if(_adm)history.replaceState(null,'',location.pathname);
+  DB=await loadData();
+  await applyLogo();
+  await applyHeroPhotos();
+  resetTimer();
+  loadAboutImg();
+  // Pause slideshow on hover
+  const heroEl=document.querySelector('.hero');
+  if(heroEl){
+    heroEl.addEventListener('mouseenter',()=>{
+      clearInterval(stimer);
+      const bar=document.getElementById('heroProgress');
+      if(bar)bar.style.transition='none';
+    });
+    heroEl.addEventListener('mouseleave',()=>resetTimer());
+  }
+  applySocialLinks();
+  renderHomeNews();
+  await renderGallery('all');
+  await renderTrophies();
+  await renderStaff();
+  animateCounters();
+  if(_adm)openAdmin();
+});
+
+/* ABOUT IMAGE — click to upload, saved in localStorage */
+function uploadAboutPhoto(e){
+  const f=e.target.files[0];if(!f)return;
+  compressImage(f,dataURL=>{
+    localStorage.setItem('rsa_about_img',dataURL);
+    setAboutImg(dataURL);
+    // update admin preview
+    const prev=document.getElementById('aboutUplPrev');
+    const img=document.getElementById('aboutUplImg');
+    const icon=document.getElementById('aboutUplIcon');
+    const txt=document.getElementById('aboutUplTxt');
+    const rem=document.getElementById('aboutRemoveWrap');
+    if(prev)prev.style.display='block';
+    if(img)img.src=dataURL;
+    if(icon)icon.style.display='none';
+    if(txt)txt.style.display='none';
+    if(rem)rem.style.display='block';
+  });
+}
+function removeAboutPhoto(){
+  localStorage.removeItem('rsa_about_img');
+  const img=document.getElementById('aboutImgEl');
+  const icon=document.getElementById('aboutImgIcon');
+  if(img){img.src='';img.removeAttribute('src');}
+  if(icon)icon.style.display='block';
+  const prev=document.getElementById('aboutUplPrev');
+  const uplIcon=document.getElementById('aboutUplIcon');
+  const txt=document.getElementById('aboutUplTxt');
+  const rem=document.getElementById('aboutRemoveWrap');
+  if(prev)prev.style.display='none';
+  if(uplIcon)uplIcon.style.display='block';
+  if(txt)txt.style.display='block';
+  if(rem)rem.style.display='none';
+}
+function setAboutImg(src){
+  const img=document.getElementById('aboutImgEl');
+  const icon=document.getElementById('aboutImgIcon');
+  if(img){img.src=src;img.style.display='block';}
+  if(icon)icon.style.display='none';
+}
+function loadAboutImg(){
+  const src=localStorage.getItem('rsa_about_img');
+  if(!src)return;
+  setAboutImg(src);
+  const prev=document.getElementById('aboutUplPrev');
+  const img=document.getElementById('aboutUplImg');
+  const icon=document.getElementById('aboutUplIcon');
+  const txt=document.getElementById('aboutUplTxt');
+  const rem=document.getElementById('aboutRemoveWrap');
+  if(prev)prev.style.display='block';
+  if(img)img.src=src;
+  if(icon)icon.style.display='none';
+  if(txt)txt.style.display='none';
+  if(rem)rem.style.display='block';
+}
+</script>
+</body>
+</html>
