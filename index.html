@@ -1273,8 +1273,36 @@ footer{background:#070707;border-top:1px solid var(--b);padding:52px 0 24px}
    Rising Sport Academy
 ============================================================ */
 const CFG_KEY='rsa_cloud_cfg';
-function getCloudCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'{}');}catch(e){return {};}}
-function saveCloudCfg(c){localStorage.setItem(CFG_KEY,JSON.stringify(c));}
+
+// SITE CREDENTIALS — set these once, they work on ALL devices
+// Fill in after setting up Cloudinary and JSONbin
+const SITE_CFG={
+  cloudName:'dus5xjihx',        // Your Cloudinary cloud name
+  uploadPreset:'risingsport',     // Your Cloudinary unsigned preset
+  jsonbinBin:'6a31a946da38895dfecbf54c',       // Your JSONbin Bin ID
+  jsonbinKey:'6a31a946da38895dfecbf54c'        // Your JSONbin Master Key
+};
+
+function getCloudCfg(){
+  // Admin overrides take priority, then use hardcoded site config
+  try{
+    const saved=JSON.parse(localStorage.getItem(CFG_KEY)||'{}');
+    return {
+      cloudName: saved.cloudName||SITE_CFG.cloudName,
+      uploadPreset: saved.uploadPreset||SITE_CFG.uploadPreset,
+      jsonbinBin: saved.jsonbinBin||SITE_CFG.jsonbinBin,
+      jsonbinKey: saved.jsonbinKey||SITE_CFG.jsonbinKey
+    };
+  }catch(e){return SITE_CFG;}
+}
+function saveCloudCfg(c){
+  localStorage.setItem(CFG_KEY,JSON.stringify(c));
+  // Also update SITE_CFG in memory
+  SITE_CFG.cloudName=c.cloudName||SITE_CFG.cloudName;
+  SITE_CFG.uploadPreset=c.uploadPreset||SITE_CFG.uploadPreset;
+  SITE_CFG.jsonbinBin=c.jsonbinBin||SITE_CFG.jsonbinBin;
+  SITE_CFG.jsonbinKey=c.jsonbinKey||SITE_CFG.jsonbinKey;
+}
 
 /* ============================================================
    SAVE INDICATOR
